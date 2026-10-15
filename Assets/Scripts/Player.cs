@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {   
@@ -19,6 +20,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.freezeRotation = true;
+
         sr = GetComponent<SpriteRenderer>();
     }
 
@@ -46,12 +49,15 @@ public class Player : MonoBehaviour
             sr.flipX = true;
             walk = true;
         }
+
         else if (!walk && !onFloor)
         {   
             sr.sprite = jumping;
         }
+
         else
         {
+            sr.sprite=standing;
             rb.linearVelocityX = 0;
             walk = false;
         }
@@ -61,8 +67,15 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Platform"))
         {      
-            sr.sprite = standing;
             onFloor = true;
         }
+    }
+
+    private void OnTgerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Dead"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }       
     }
 }
