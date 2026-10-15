@@ -1,12 +1,11 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {   
     public float speed = 5f;
     public float powerJump = 10f;
     bool onFloor = true;
-    bool walk = false;
+    bool walk = true;
 
     public Rigidbody2D rb;
     public SpriteRenderer sr;
@@ -47,6 +46,10 @@ public class Player : MonoBehaviour
             sr.flipX = true;
             walk = true;
         }
+        else if (!walk && !onFloor)
+        {   
+            sr.sprite = jumping;
+        }
         else
         {
             rb.linearVelocityX = 0;
@@ -59,14 +62,6 @@ public class Player : MonoBehaviour
         if (other.gameObject.CompareTag("Platform"))
         {      
             sr.sprite = standing;
-            onFloor = true;
-        }
-    }
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Platform"))
-        {      
-            sr.sprite = jumping;
             onFloor = true;
         }
     }
