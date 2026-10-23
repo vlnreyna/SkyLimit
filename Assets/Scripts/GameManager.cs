@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,11 +12,32 @@ public class GameManager : MonoBehaviour
     private CheckPoint checkpointActual;
 
     void Start(){
-        if(gameOverPanel != null)
-            gameOverPanel.setActive(false);
-        if(reiniciarButton != null)
-            reiniciarButton.onClick.AddListener(ReiniciarEscena);
-        if(menuButton != null)
-            menuButton.onClick.AddListener(IrAlMenu);
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if(player != null){
+            checkpointPosicion = player.transform.position;
+        }
+    }
+
+    public void IrAlMenu(){
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Menu");
+    }
+
+    public void ActivarCheckpoint(Vector3 nuevaPosicion, CheckPoint nuevoCheckpoint){
+        checkpointPosicion = nuevaPosicion;
+        checkpointActual = nuevoCheckpoint;
+    }
+
+    public void RespawnJugador(){
+        StartCoroutine(RespawnCoroutine());
+    }
+
+    IEnumerator RespawnCoroutine(){
+        yield return new WaitForSeconds(1f);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if(player != null){
+            player.GetComponent<PlayerRespawn>().Reaparecer();
+        }
     }
 }
