@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     public float powerJump = 10f;
     bool onFloor = true;
     bool walk = true;
+    public bool muerto = false;
+    public Animator animator;
 
     public Rigidbody2D rb;
     public SpriteRenderer sr;
@@ -23,6 +25,7 @@ public class Player : MonoBehaviour
         rb.freezeRotation = true;
 
         sr = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -77,5 +80,14 @@ public class Player : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }       
+    }
+
+    public void Respawn(Vector3 posicionCheckpoint){
+        muerto = false;
+
+        transform.position = posicionCheckpoint;
+
+        rb.linearVelocity = Vector2.zero;
+        animator.SetBool("muerto", false);
     }
 }
